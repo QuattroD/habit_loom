@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:calendar_appbar/calendar_appbar.dart';
 import 'package:habit_loom/Drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:habit_loom/globals.dart' as globals;
+import 'package:intl/intl.dart';
+import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 var user = FirebaseAuth.instance;
-// ignore: prefer_typing_uninitialized_variables
-var currentDate;
 class BodyWidget extends StatefulWidget {
   const BodyWidget({super.key});
 
@@ -18,18 +18,14 @@ class BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
+  DateTime _selectedDate = DateTime.now();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 30, 30, 30),
-      appBar: CalendarAppBar(
-          fullCalendar: false,
-          locale: 'ru',
-          accent: const Color.fromARGB(255, 76, 142, 93),
-          onDateChanged: (value) => currentDate = value,
-          selectedDate: DateTime.now(),
-          firstDate: DateTime.now().subtract(const Duration(days: 60)),
-          lastDate: DateTime.now()),
+      // backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      appBar: AppBar(backgroundColor: const Color.fromARGB(255, 76, 142, 93),),
       drawer: const Drawer(child: DrawerMenu()),
       floatingActionButton: FloatingActionButton(
           heroTag: 'btn1',
@@ -38,83 +34,53 @@ class _BodyWidgetState extends State<BodyWidget> {
           },
           backgroundColor: const Color.fromARGB(255, 76, 142, 93),
           child: const Icon(Icons.add)), 
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('Tasks-${user.currentUser!.email.toString()}').where('task-date', isEqualTo: currentDate.toString()).snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot?> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(color: Color.fromARGB(255, 76, 142, 93),),
-              );
-            }
-            var snap = snapshot.data!.docs;
-            return ListView.builder(
-                itemCount: snap.length,
-                itemBuilder: (context, index) {
-                  return Slidable(
-                    startActionPane: ActionPane(
-                      motion: const BehindMotion(),
-                      children: [
-                        const Padding(padding: EdgeInsets.only(right: 7,)),
-                        SlidableAction(onPressed: ((context) {}),
-                        icon: Icons.skip_next,
-                        // label: 'Пропустить',
-                        backgroundColor: Colors.blue,
-                        borderRadius: const BorderRadius.all(Radius.circular(20)),),
-                        const Padding(padding: EdgeInsets.only(left: 7,)),
-                        SlidableAction(onPressed: ((context) {
-                          globals.uid = snap[index].id;
-                          globals.name = snap[index]['name'];
-                          globals.monday = snap[index]['monday'];
-                          globals.tuesday = snap[index]['tuesday'];
-                          globals.wednesday = snap[index]['wednesday'];
-                          globals.thursday = snap[index]['thursday'];
-                          globals.friday = snap[index]['friday'];
-                          globals.saturday = snap[index]['saturday'];
-                          globals.sunday = snap[index]['sunday'];
-                          globals.morning = snap[index]['morning'];
-                          globals.day = snap[index]['day'];
-                          globals.night = snap[index]['night'];
-                          globals.percent = snap[index]['percent'];
-                          Navigator.popAndPushNamed(context, '/edit_task');
-                        }),
-                        icon: Icons.edit,
-                        // label: 'Редактировать',
-                        backgroundColor: Colors.purple,
-                        borderRadius: const BorderRadius.all(Radius.circular(20)),),
-                        const Padding(padding: EdgeInsets.only(left: 7,)),
-                      ],
-                    ),
-                    endActionPane: ActionPane(
-                      motion: const BehindMotion(),
-                      children: [
-                        const Padding(padding: EdgeInsets.only(right: 7,)),
-                        SlidableAction(onPressed: ((context) {}),
-                        icon: Icons.check,   
-                        // label: 'Выполнено',
-                        backgroundColor: Colors.green,
-                        borderRadius: const BorderRadius.all(Radius.circular(20)),),
-                      ],
-                    ),
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 20),
-                          padding: const EdgeInsets.only(top: 15),
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 76, 142, 93),
-                              borderRadius: BorderRadius.all(Radius.circular(20))),
-                          child: ListTile(
-                            title: Text(snap[index]['name'],
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 30)),
-                            subtitle: FAProgressBar(
-                              size: 3,
-                              currentValue: double.parse(snap[index]['percent'].toString()),
-                              progressColor: Colors.white,
-                            ),
-                          )));
-                });
-          }),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(DateFormat.yMMMMd().format(DateTime.now()), style: const TextStyle(color: Color.fromARGB(255, 184, 184, 184), fontSize: 25,),),
+                    const Text('Today', style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)
+                ]),
+              )
+            ],
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 20, left: 20),
+            child: DatePicker(
+              DateTime.now(),
+              height: 100,
+              width: 80,
+              initialSelectedDate: DateTime.now(),
+              selectionColor: const Color.fromARGB(255, 76, 142, 93),
+              locale: 'ru',
+              selectedTextColor: Colors.white,
+              dateTextStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey
+              ),
+              dayTextStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.white
+              ),
+              monthTextStyle: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 255, 255, 255)
+              ),
+              onDateChange: (date) {
+                _selectedDate = date;
+              },
+            ),
+          )
+        ],
+      )
     );
   }
 }
