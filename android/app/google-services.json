@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "259931424052",
+    "project_id": "education-project-5985e",
+    "storage_bucket": "education-project-5985e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259931424052:android:ee9c9f99885c8bc5371161",
+        "android_client_info": {
+          "package_name": "com.example.habit_loom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDakHWVFLJ5kVqA4SXZQZq2J1-nCJujTtc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
