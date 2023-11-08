@@ -6,10 +6,11 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:habit_loom/globals.dart' as globals;
+import 'package:intl/intl.dart';
 
 var user = FirebaseAuth.instance;
-// ignore: prefer_typing_uninitialized_variables
-var currentDate;
+var currentDate = DateFormat.yMd().format(DateTime.now());
+
 class BodyWidget extends StatefulWidget {
   const BodyWidget({super.key});
 
@@ -22,13 +23,16 @@ class _BodyWidgetState extends State<BodyWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 30, 30, 30),
+      // appBar: AppBar(),
       appBar: CalendarAppBar(
           fullCalendar: false,
           locale: 'ru',
           accent: const Color.fromARGB(255, 76, 142, 93),
-          onDateChanged: (value) => currentDate = value,
-          selectedDate: DateTime.now(),
-          firstDate: DateTime.now().subtract(const Duration(days: 60)),
+          onDateChanged: (value) {
+            currentDate = DateFormat.yMd().format(value);
+            print(currentDate);
+          },
+          firstDate: DateTime.now().subtract(const Duration(days: 140)),
           lastDate: DateTime.now()),
       drawer: const Drawer(child: DrawerMenu()),
       floatingActionButton: FloatingActionButton(
@@ -39,6 +43,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           backgroundColor: const Color.fromARGB(255, 76, 142, 93),
           child: const Icon(Icons.add)), 
       body: StreamBuilder(
+        key: GlobalKey(),
           stream: FirebaseFirestore.instance.collection('Tasks-${user.currentUser!.email.toString()}').where('task-date', isEqualTo: currentDate.toString()).snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot?> snapshot) {
@@ -58,7 +63,6 @@ class _BodyWidgetState extends State<BodyWidget> {
                         const Padding(padding: EdgeInsets.only(right: 7,)),
                         SlidableAction(onPressed: ((context) {}),
                         icon: Icons.skip_next,
-                        // label: 'Пропустить',
                         backgroundColor: Colors.blue,
                         borderRadius: const BorderRadius.all(Radius.circular(20)),),
                         const Padding(padding: EdgeInsets.only(left: 7,)),
@@ -76,6 +80,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                           globals.day = snap[index]['day'];
                           globals.night = snap[index]['night'];
                           globals.percent = snap[index]['percent'];
+                          globals.taskdate = snap[index]['task-date'];
                           Navigator.popAndPushNamed(context, '/edit_task');
                         }),
                         icon: Icons.edit,

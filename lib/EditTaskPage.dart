@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'globals.dart' as globals;
 
 TextEditingController taskNameEdit = TextEditingController();
+TextEditingController dateCreateEdit = TextEditingController();
 var user = FirebaseAuth.instance;
 CollectionReference task = FirebaseFirestore.instance.collection('Tasks-${user.currentUser!.email.toString()}');
 
@@ -22,6 +24,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
     super.initState();
     Future.delayed(Duration.zero,(){
        taskNameEdit.text = globals.name;
+       dateCreateEdit.text = globals.taskdate;
   });
   }
 
@@ -38,7 +41,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
   bool night = globals.night;
   bool difference = true;
   double percent = globals.percent;
-  String dataCreate = DateTime.now().toString();
+  String taskdate = globals.taskdate;
+  DateTime date = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +75,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                 'day' : day,
                 'night' : night,
                 'percent' : percent,
-                'task-date' : dataCreate,
+                'task-date' : dateCreateEdit.text,
               });
               setState(() {
                 taskNameEdit.text = '';
@@ -115,6 +119,42 @@ class _EditTaskPageState extends State<EditTaskPage> {
                 ),
               ],
             ),
+            SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: TextField(
+                    readOnly: true,
+                    onTap: () async {
+                      DateTime? date = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2050));
+                      if(date != null) {
+                        setState(() {
+                          dateCreateEdit.text = DateFormat.yMd().format(date);
+                        });
+                      }
+                    },
+                    controller: dateCreateEdit,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25),
+                    cursorColor: const Color.fromARGB(255, 233, 241, 243),
+                    decoration: InputDecoration(
+                      hintText: "🗓️ Выберите дату",
+                      hintStyle: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 76, 142, 93))),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 76, 142, 93))),
+                    ),
+                  ),
+                ),
             Row(
               children: [
                 SizedBox(

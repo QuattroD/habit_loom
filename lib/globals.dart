@@ -14,3 +14,4 @@ bool morning = true;
 bool day = true;
 bool night = true;
 double percent = 0;
+String taskdate = '';
