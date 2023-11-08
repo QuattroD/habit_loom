@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:habit_loom/globals.dart' as globals;
 
 var user = FirebaseAuth.instance;
+// ignore: prefer_typing_uninitialized_variables
 var currentDate;
 class BodyWidget extends StatefulWidget {
   const BodyWidget({super.key});
@@ -21,13 +22,13 @@ class _BodyWidgetState extends State<BodyWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 30, 30, 30),
-      // appBar: AppBar(),
       appBar: CalendarAppBar(
           fullCalendar: false,
           locale: 'ru',
           accent: const Color.fromARGB(255, 76, 142, 93),
           onDateChanged: (value) => currentDate = value,
-          firstDate: DateTime.now().subtract(const Duration(days: 140)),
+          selectedDate: DateTime.now(),
+          firstDate: DateTime.now().subtract(const Duration(days: 60)),
           lastDate: DateTime.now()),
       drawer: const Drawer(child: DrawerMenu()),
       floatingActionButton: FloatingActionButton(
