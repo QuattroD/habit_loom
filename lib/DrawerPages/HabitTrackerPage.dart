@@ -28,7 +28,9 @@ class _BodyWidgetState extends State<BodyWidget> {
           locale: 'ru',
           accent: const Color.fromARGB(255, 76, 142, 93),
           onDateChanged: (value) {
-            currentDate = DateFormat.yMd().format(value);
+            setState(() {
+              currentDate = DateFormat.yMd().format(value);
+            });
             print(currentDate);
           },
           firstDate: DateTime.now().subtract(const Duration(days: 140)),
@@ -54,6 +56,7 @@ class _BodyWidgetState extends State<BodyWidget> {
             return ListView.builder(
                 itemCount: snap.length,
                 itemBuilder: (context, index) {
+                  // if(snap[index][''])
                   return Slidable(
                     startActionPane: ActionPane(
                       motion: const BehindMotion(),
