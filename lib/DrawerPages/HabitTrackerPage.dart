@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:calendar_appbar/calendar_appbar.dart';
 import 'package:habit_loom/Drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:habit_loom/globals.dart' as globals;
@@ -42,8 +41,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           },
           backgroundColor: const Color.fromARGB(255, 76, 142, 93),
           child: const Icon(Icons.add)), 
-      body: StreamBuilder(
-        key: GlobalKey(),
+          body: StreamBuilder(
           stream: FirebaseFirestore.instance.collection('Tasks-${user.currentUser!.email.toString()}').where('task-date', isEqualTo: currentDate.toString()).snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot?> snapshot) {
@@ -69,18 +67,11 @@ class _BodyWidgetState extends State<BodyWidget> {
                         SlidableAction(onPressed: ((context) {
                           globals.uid = snap[index].id;
                           globals.name = snap[index]['name'];
-                          globals.monday = snap[index]['monday'];
-                          globals.tuesday = snap[index]['tuesday'];
-                          globals.wednesday = snap[index]['wednesday'];
-                          globals.thursday = snap[index]['thursday'];
-                          globals.friday = snap[index]['friday'];
-                          globals.saturday = snap[index]['saturday'];
-                          globals.sunday = snap[index]['sunday'];
-                          globals.morning = snap[index]['morning'];
-                          globals.day = snap[index]['day'];
-                          globals.night = snap[index]['night'];
-                          globals.percent = snap[index]['percent'];
                           globals.taskdate = snap[index]['task-date'];
+                          globals.taskNote = snap[index]['task-note'];
+                          globals.Remind = snap[index]['remind'];
+                          globals.timeStart = snap[index]['start-time'];
+                          globals.timeEnd = snap[index]['end-time'];
                           Navigator.popAndPushNamed(context, '/edit_task');
                         }),
                         icon: Icons.edit,
@@ -112,11 +103,11 @@ class _BodyWidgetState extends State<BodyWidget> {
                             title: Text(snap[index]['name'],
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 30)),
-                            subtitle: FAProgressBar(
-                              size: 3,
-                              currentValue: double.parse(snap[index]['percent'].toString()),
-                              progressColor: Colors.white,
-                            ),
+                            subtitle: Row(
+                              children: [
+                                Text(snap[index]['task-note'], style: const TextStyle(color: Colors.white, fontSize: 20),)
+                              ],
+                            )
                           )));
                 });
           }),

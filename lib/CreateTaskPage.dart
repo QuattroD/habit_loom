@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 TextEditingController taskName = TextEditingController();
 TextEditingController taskNote = TextEditingController();
 TextEditingController dateCreate = TextEditingController();
+TextEditingController startTime = TextEditingController();
+TextEditingController endTime = TextEditingController();
 int _selectedRemind = 5;
 List<int> remindList = [5, 10, 15, 20];
 
@@ -33,6 +35,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               setState(() {
                 taskName.text = '';
                 dateCreate.text = '';
+                taskNote.text = '';
+                startTime.text = '';
+                endTime.text = '';
               });
               Navigator.pushNamed(context, '/home');
             },
@@ -47,10 +52,16 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                     'name': taskName.text,
                     'task-date': dateCreate.text,
                     'task-note': taskNote.text,
+                    'remind': _selectedRemind,
+                    'start-time': startTime.text,
+                    'end-time': endTime.text
                   });
                   setState(() {
                     taskName.text = '';
                     dateCreate.text = '';
+                    taskNote.text = '';
+                    startTime.text = '';
+                    endTime.text = '';
                   });
                   Navigator.popAndPushNamed(context, '/home');
                 })
@@ -95,24 +106,44 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               ],
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  child: TextField(
+                    readOnly: true,
+                    onTap: () async {
+                      DateTime? date = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2050));
+                      if(date != null) {
+                        setState(() {
+                          dateCreate.text = DateFormat.yMd().format(date);
+                        });
+                      }
+                    },
+                    controller: dateCreate,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25),
+                    cursorColor: const Color.fromARGB(255, 233, 241, 243),
+                    decoration: InputDecoration(
+                      hintText: "🗓️ Выберите дату",
+                      hintStyle: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 76, 142, 93))),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 76, 142, 93))),
+                    ),
+                  ),
+                ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
               child: TextField(
-                readOnly: true,
-                onTap: () async {
-                  DateTime? date = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2050));
-                  if (date != null) {
-                    setState(() {
-                      dateCreate.text = DateFormat.yMd().format(date);
-                    });
-                  }
-                },
                 controller: taskNote,
                 style: const TextStyle(
                     color: Colors.white,
@@ -135,7 +166,84 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
+              height: MediaQuery.of(context).size.height * 0.03,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: TextField(
+                    readOnly: true,
+                    onTap: () async {
+                      TimeOfDay? start = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+                      if(start != null) {
+                        setState(() {
+                          startTime.text = '${start.hour}:${start.minute}';
+                        });
+                      }
+                    },
+                    controller: startTime,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25),
+                    cursorColor: const Color.fromARGB(255, 233, 241, 243),
+                    decoration: InputDecoration(
+                      hintText: "⌛ Начало",
+                      hintStyle: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 76, 142, 93))),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 76, 142, 93))),
+                    ),
+                  ),
+                ),
+                SizedBox(
+              width: MediaQuery.of(context).size.height * 0.02,
+            ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: TextField(
+                    readOnly: true,
+                    onTap: () async {
+                      TimeOfDay? end = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+                      if(end != null) {
+                        setState(() {
+                          endTime.text = '${end.hour}:${end.minute}';
+                        });
+                      }
+                    },
+                    controller: endTime,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25),
+                    cursorColor: const Color.fromARGB(255, 233, 241, 243),
+                    decoration: InputDecoration(
+                      hintText: "⌛ Конец",
+                      hintStyle: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 76, 142, 93))),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 76, 142, 93))),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
@@ -168,7 +276,7 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                     (int value) {
                       return DropdownMenuItem<String>(
                         value: value.toString(),
-                        child: Text('⌚ Напомнить за ${value.toString()}', style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),),
+                        child: Text('⌚ Напомнить за ${value.toString()} минут', style: const TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),),
                       );
                     },
                   ).toList()),
