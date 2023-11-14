@@ -8,3 +8,4 @@ int Remind = 0;
 String timeStart = '';
 String timeEnd = '';
 String taskNote = '';
+String isCompleted = 'TODO';

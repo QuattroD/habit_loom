@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:habit_loom/globals.dart' as globals;
 
 TextEditingController taskName = TextEditingController();
 TextEditingController taskNote = TextEditingController();
@@ -54,7 +55,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                     'task-note': taskNote.text,
                     'remind': _selectedRemind,
                     'start-time': startTime.text,
-                    'end-time': endTime.text
+                    'end-time': endTime.text,
+                    'isCompleted': globals.isCompleted
                   });
                   setState(() {
                     taskName.text = '';
@@ -254,12 +256,12 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 76, 142, 93), width: 2),
+                          color: Color.fromARGB(255, 76, 142, 93), width: 1),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 76, 142, 93), width: 2),
+                          color: Color.fromARGB(255, 76, 142, 93), width: 1),
                     ),
                     hintText: "⌚ Напомнить",
                     hintStyle: const TextStyle(
