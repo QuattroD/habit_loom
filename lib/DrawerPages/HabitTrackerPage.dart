@@ -179,18 +179,69 @@ class _BodyWidgetState extends State<BodyWidget> {
                                     Scaffold.of(context).showBottomSheet<void>(
                                         (BuildContext context) {
                                       return Container(
-                                        height: MediaQuery.of(context).size.height * 0.3,
-                                        width: MediaQuery.of(context).size.width,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.3,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         decoration: const BoxDecoration(
                                             color: Color.fromARGB(
                                                 255, 76, 142, 93)),
                                         child: Column(
                                           children: [
                                             InkWell(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  if (snap[index]
+                                                          ['isCompleted'] ==
+                                                      'TODO') {
+                                                    FirebaseFirestore.instance
+                                                        .collection(
+                                                            'Tasks-${user.currentUser!.email.toString()}')
+                                                        .doc(snap[index].id)
+                                                        .set({
+                                                      'name': snap[index]
+                                                          ['name'],
+                                                      'task-date': snap[index]
+                                                          ['task-date'],
+                                                      'task-note': snap[index]
+                                                          ['task-note'],
+                                                      'remind': snap[index]
+                                                          ['remind'],
+                                                      'start-time': snap[index]
+                                                          ['start-time'],
+                                                      'end-time': snap[index]
+                                                          ['end-time'],
+                                                      'isCompleted': 'Perfect'
+                                                    });
+                                                  } else if (snap[index]
+                                                          ['isCompleted'] ==
+                                                      'Perfect') {
+                                                    FirebaseFirestore.instance
+                                                        .collection(
+                                                            'Tasks-${user.currentUser!.email.toString()}')
+                                                        .doc(snap[index].id)
+                                                        .set({
+                                                      'name': snap[index]
+                                                          ['name'],
+                                                      'task-date': snap[index]
+                                                          ['task-date'],
+                                                      'task-note': snap[index]
+                                                          ['task-note'],
+                                                      'remind': snap[index]
+                                                          ['remind'],
+                                                      'start-time': snap[index]
+                                                          ['start-time'],
+                                                      'end-time': snap[index]
+                                                          ['end-time'],
+                                                      'isCompleted': 'TODO'
+                                                    }
+                                                    );
+                                                  }
+                                                  Navigator.pop(context);
+                                                },
                                                 child: Container(
-                                                  margin:
-                                                      const EdgeInsets.only(top: 30),
+                                                  margin: const EdgeInsets.only(
+                                                      top: 30),
                                                   width: 330,
                                                   height: 50,
                                                   decoration: BoxDecoration(
@@ -199,16 +250,21 @@ class _BodyWidgetState extends State<BodyWidget> {
                                                               Radius.circular(
                                                                   20)),
                                                       color:
-                                                          const Color.fromARGB(
-                                                              255, 33, 33, 243),
+                                                           Colors.blue,
                                                       border: Border.all(
                                                           width: 1,
-                                                          color: const Color
-                                                                  .fromARGB(255,
-                                                              33, 33, 243))),
-                                                  child: const Center(
-                                                      child: Text(
-                                                          'Задача выполнена',
+                                                          color: Colors.blue)),
+                                                  child: Center(
+                                                      child: snap[index]['isCompleted'] == 'TODO' ? const Text(
+                                                          'Закончить задачу',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 25,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600)) : const Text(
+                                                          'Отменить задачу',
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -218,16 +274,23 @@ class _BodyWidgetState extends State<BodyWidget> {
                                                                       .w600))),
                                                 )),
                                             InkWell(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  FirebaseFirestore.instance
+                                                      .collection(
+                                                          'Tasks-${user.currentUser!.email.toString()}')
+                                                      .doc(snap[index].id)
+                                                      .delete();
+                                                  Navigator.pop(context);
+                                                },
                                                 child: Container(
-                                                  margin:
-                                                      const EdgeInsets.only(top: 10),
+                                                  margin: const EdgeInsets.only(
+                                                      top: 10),
                                                   height: 50,
                                                   width: 330,
                                                   decoration: BoxDecoration(
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .all(
+                                                              .all(
                                                               Radius.circular(
                                                                   20)),
                                                       color: Colors.red,
@@ -245,16 +308,36 @@ class _BodyWidgetState extends State<BodyWidget> {
                                                   )),
                                                 )),
                                             InkWell(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  globals.uid = snap[index].id;
+                                                  globals.name =
+                                                      snap[index]['name'];
+                                                  globals.taskdate =
+                                                      snap[index]['task-date'];
+                                                  globals.taskNote =
+                                                      snap[index]['task-note'];
+                                                  globals.Remind =
+                                                      snap[index]['remind'];
+                                                  globals.timeStart =
+                                                      snap[index]['start-time'];
+                                                  globals.timeEnd =
+                                                      snap[index]['end-time'];
+                                                  globals.isCompleted =
+                                                      snap[index]
+                                                          ['isCompleted'];
+                                                  Navigator.popAndPushNamed(
+                                                      context, '/edit_task');
+                                                  Navigator.pop(context);
+                                                },
                                                 child: Container(
-                                                  margin:
-                                                      const EdgeInsets.only(top: 30),
+                                                  margin: const EdgeInsets.only(
+                                                      top: 30),
                                                   width: 330,
                                                   height: 50,
                                                   decoration: BoxDecoration(
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .all(
+                                                              .all(
                                                               Radius.circular(
                                                                   20)),
                                                       border: Border.all(
@@ -262,7 +345,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                                                           color: Colors.white)),
                                                   child: const Center(
                                                       child: Text(
-                                                    'Закрыть',
+                                                    'Редактировать',
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 25,
