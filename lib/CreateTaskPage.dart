@@ -108,38 +108,50 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
               ],
             ),
             SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.95,
-                  child: TextField(
-                    readOnly: true,
-                    onTap: () async {
-                      DateTime? date = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2050));
-                      if(date != null) {
-                        setState(() {
-                          dateCreate.text = DateFormat.yMd().format(date);
-                        });
-                      }
-                    },
-                    controller: dateCreate,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25),
-                    cursorColor: const Color.fromARGB(255, 233, 241, 243),
-                    decoration: InputDecoration(
-                      hintText: "🗓️ Выберите дату",
-                      hintStyle: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 76, 142, 93))),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 76, 142, 93))),
-                    ),
-                  ),
+              width: MediaQuery.of(context).size.width * 0.95,
+              child: TextField(
+                readOnly: true,
+                onTap: () async {
+                  DateTime? date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2050),
+                    builder: (context, child) => Theme(
+                        data: ThemeData().copyWith(
+                            colorScheme: const ColorScheme.dark(
+                                primary: Color.fromARGB(255, 76, 142, 93),
+                                surface: Color.fromARGB(255, 76, 142, 93),
+                                onSurface: Colors.black)),
+                        child: child ?? const Text('')),
+                  );
+                  if (date != null) {
+                    setState(() {
+                      dateCreate.text = DateFormat.yMd().format(date);
+                    });
+                  }
+                },
+                controller: dateCreate,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25),
+                cursorColor: const Color.fromARGB(255, 233, 241, 243),
+                decoration: InputDecoration(
+                  hintText: "🗓️ Выберите дату",
+                  hintStyle: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 76, 142, 93))),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 76, 142, 93))),
                 ),
+              ),
+            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.03,
             ),
@@ -178,8 +190,18 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                   child: TextField(
                     readOnly: true,
                     onTap: () async {
-                      TimeOfDay? start = await showTimePicker(context: context, initialTime: TimeOfDay.now());
-                      if(start != null) {
+                      TimeOfDay? start = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                        builder: (context, child) => Theme(
+                            data: ThemeData().copyWith(
+                                colorScheme: const ColorScheme.dark(
+                                    primary: Color.fromARGB(255, 76, 142, 93),
+                                    surface: Color.fromARGB(255, 255, 255, 255),
+                                    onSurface: Colors.black)),
+                            child: child ?? const Text('')),
+                      );
+                      if (start != null) {
                         setState(() {
                           startTime.text = '${start.hour}:${start.minute}';
                         });
@@ -207,15 +229,25 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                   ),
                 ),
                 SizedBox(
-              width: MediaQuery.of(context).size.height * 0.02,
-            ),
+                  width: MediaQuery.of(context).size.height * 0.02,
+                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.45,
                   child: TextField(
                     readOnly: true,
                     onTap: () async {
-                      TimeOfDay? end = await showTimePicker(context: context, initialTime: TimeOfDay.now());
-                      if(end != null) {
+                      TimeOfDay? end = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                        builder: (context, child) => Theme(
+                            data: ThemeData().copyWith(
+                                colorScheme: const ColorScheme.dark(
+                                    primary: Color.fromARGB(255, 76, 142, 93),
+                                    surface: Color.fromARGB(255, 255, 255, 255),
+                                    onSurface: Colors.black)),
+                            child: child ?? const Text('')),
+                      );
+                      if (end != null) {
                         setState(() {
                           endTime.text = '${end.hour}:${end.minute}';
                         });
@@ -250,8 +282,8 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.95,
               child: DropdownButtonFormField(
-                dropdownColor: const Color.fromARGB(255, 30, 30, 30),
-                borderRadius: BorderRadius.circular(15),
+                  dropdownColor: const Color.fromARGB(255, 30, 30, 30),
+                  borderRadius: BorderRadius.circular(15),
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -278,7 +310,13 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
                     (int value) {
                       return DropdownMenuItem<String>(
                         value: value.toString(),
-                        child: Text('⌚ Напомнить за ${value.toString()} минут', style: const TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),),
+                        child: Text(
+                          '⌚ Напомнить за ${value.toString()} минут',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold),
+                        ),
                       );
                     },
                   ).toList()),

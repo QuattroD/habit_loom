@@ -5,6 +5,7 @@ import 'package:habit_loom/Drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:habit_loom/notifications.dart';
 import 'package:habit_loom/globals.dart' as globals;
 import 'package:intl/intl.dart';
 
@@ -327,7 +328,6 @@ class _BodyWidgetState extends State<BodyWidget> {
                                                           ['isCompleted'];
                                                   Navigator.popAndPushNamed(
                                                       context, '/edit_task');
-                                                  Navigator.pop(context);
                                                 },
                                                 child: Container(
                                                   margin: const EdgeInsets.only(

@@ -23,11 +23,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                             'assets/drawer.jpg'),
                         fit: BoxFit.cover)),
                 child: ListTile(
-                  textColor: Colors.white,
-                  title: Text(
-                      '\n\nВыполните все задачи сегодня, чтобы начать новую серию', style: TextStyle(fontSize: 16)),
-                  subtitle: Text('0 дней \nтекущий рекорд', style: TextStyle(fontSize: 25)),
-                )),
+                  textColor: Colors.white,                )),
             ListTile(
               leading: const Icon(Icons.calendar_today,
                   color: Color.fromARGB(255, 201, 231, 145)),
